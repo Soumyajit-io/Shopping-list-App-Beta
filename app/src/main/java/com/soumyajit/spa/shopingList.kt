@@ -1,8 +1,5 @@
 package com.soumyajit.spa
 
-import android.graphics.drawable.Icon
-import android.icu.text.CaseMap
-import android.widget.Button
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -13,27 +10,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,11 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.nio.file.WatchEvent
 
 data class ShoppingIteam(val num:Int,
                          var name :String,
@@ -76,7 +64,7 @@ fun MainFunction(){
         var DialogShow by remember { mutableStateOf(false) }
         var IteamName by remember {mutableStateOf("")}
         var IteamQunt by remember {mutableStateOf("")}
-        var Context = LocalContext.current
+        val Context = LocalContext.current
 
 
 
@@ -98,7 +86,26 @@ fun MainFunction(){
             )
             {
                 items(SIteam){
-                    ShoppingListItem(it,{},{})
+                    item ->
+                    if (item.isEditing){
+                        ShoppingItemEditor(item= item, onEditComplete ={
+                            Editedname,Editedqty ->
+                            SIteam = SIteam.map{it.copy(isEditing = false)}
+                            val editedItem = SIteam.find{it.num == item.num}
+                            editedItem?.let{
+                                it.name = Editedname
+                                it.quantity = Editedqty
+                            }
+                        })
+                    }
+                    else{
+                        ShoppingListItem(item=item, onEditClick = {
+                            //finding out which item we are editing
+                            SIteam=SIteam.map { it.copy(isEditing =it.num==item.num) }
+                        }, onDeleteClick = {
+                            SIteam=SIteam-item
+                        })
+                    }
                 }
             }
         }
@@ -111,7 +118,7 @@ fun MainFunction(){
                         Button(onClick = {DialogShow = false}){
                             Text("Cancel")
                         }
-                        var Context = LocalContext.current
+
                         Button(onClick = {
                             if(IteamName.isNotBlank()){
                                 var newItem = ShoppingIteam(
@@ -161,12 +168,6 @@ fun MainFunction(){
 
     }
 
-}
-@Preview(showBackground = true)
-@Composable
-fun MainFunctionTheme(){
-
-    MainFunction()
 }
 
 @Composable
