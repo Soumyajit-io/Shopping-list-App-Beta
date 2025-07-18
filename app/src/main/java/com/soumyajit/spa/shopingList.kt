@@ -60,10 +60,10 @@ fun MainFunction(){
 
 
 
-        var SIteam by remember { mutableStateOf(listOf<ShoppingIteam>()) }
+        var SItem by remember { mutableStateOf(listOf<ShoppingIteam>()) }
         var DialogShow by remember { mutableStateOf(false) }
-        var IteamName by remember {mutableStateOf("")}
-        var IteamQunt by remember {mutableStateOf("")}
+        var ItemName by remember {mutableStateOf("")}
+        var ItemQunt by remember {mutableStateOf("")}
         val Context = LocalContext.current
 
 
@@ -85,13 +85,13 @@ fun MainFunction(){
                     .padding(5.dp)
             )
             {
-                items(SIteam){
+                items(SItem){
                     item ->
                     if (item.isEditing){
                         ShoppingItemEditor(item= item, onEditComplete ={
                             Editedname,Editedqty ->
-                            SIteam = SIteam.map{it.copy(isEditing = false)}
-                            val editedItem = SIteam.find{it.num == item.num}
+                            SItem = SItem.map{it.copy(isEditing = false)}
+                            val editedItem = SItem.find{it.num == item.num}
                             editedItem?.let{
                                 it.name = Editedname
                                 it.quantity = Editedqty
@@ -101,9 +101,9 @@ fun MainFunction(){
                     else{
                         ShoppingListItem(item=item, onEditClick = {
                             //finding out which item we are editing
-                            SIteam=SIteam.map { it.copy(isEditing =it.num==item.num) }
+                            SItem=SItem.map { it.copy(isEditing =it.num==item.num) }
                         }, onDeleteClick = {
-                            SIteam=SIteam-item
+                            SItem=SItem-item
                         })
                     }
                 }
@@ -120,15 +120,15 @@ fun MainFunction(){
                         }
 
                         Button(onClick = {
-                            if(IteamName.isNotBlank()){
+                            if(ItemName.isNotBlank()){
                                 var newItem = ShoppingIteam(
-                                    num = SIteam.size+1,
-                                    name = IteamName,
-                                    quantity = IteamQunt,)
-                                SIteam+=newItem
+                                    num = SItem.size+1,
+                                    name = ItemName,
+                                    quantity = ItemQunt,)
+                                SItem+=newItem
                                 DialogShow = false
-                                IteamName = ""
-                                IteamQunt = ""
+                                ItemName = ""
+                                ItemQunt = ""
 
                                 Toast.makeText(Context,"Added Successfully", Toast.LENGTH_LONG).show()
 
@@ -146,16 +146,16 @@ fun MainFunction(){
                 text = {
                     Column {
                         OutlinedTextField(
-                            value = IteamName,
-                            onValueChange = { IteamName = it },
+                            value = ItemName,
+                            onValueChange = { ItemName = it },
                             label = { Text("Enter Item") },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth().padding(10.dp)
                         )
 
                         OutlinedTextField(
-                            value = IteamQunt,
-                            onValueChange = { IteamQunt = it },
+                            value = ItemQunt,
+                            onValueChange = { ItemQunt = it },
                             label = { Text("Enter Quantity") },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth().padding(10.dp)
