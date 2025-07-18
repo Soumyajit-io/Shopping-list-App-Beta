@@ -37,7 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
-data class ShoppingIteam(val num:Int,
+data class ShoppingItem(val num:Int,
                          var name :String,
                          var quantity: String,
                          var isEditing: Boolean = false
@@ -60,7 +60,7 @@ fun MainFunction(){
 
 
 
-        var SItem by remember { mutableStateOf(listOf<ShoppingIteam>()) }
+        var SItem by remember { mutableStateOf(listOf<ShoppingItem>()) }
         var DialogShow by remember { mutableStateOf(false) }
         var ItemName by remember {mutableStateOf("")}
         var ItemQunt by remember {mutableStateOf("")}
@@ -121,7 +121,7 @@ fun MainFunction(){
 
                         Button(onClick = {
                             if(ItemName.isNotBlank()){
-                                var newItem = ShoppingIteam(
+                                var newItem = ShoppingItem(
                                     num = SItem.size+1,
                                     name = ItemName,
                                     quantity = ItemQunt,)
@@ -172,7 +172,7 @@ fun MainFunction(){
 
 @Composable
 fun ShoppingListItem (
-    item: ShoppingIteam,
+    item: ShoppingItem,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ){
@@ -202,7 +202,7 @@ fun ShoppingListItem (
     }
 }
 @Composable
-fun ShoppingItemEditor(item: ShoppingIteam,onEditComplete: (String , String ) -> Unit){
+fun ShoppingItemEditor(item: ShoppingItem,onEditComplete: (String , String ) -> Unit){
     var Editedname by remember{mutableStateOf(item.name)}
     var Editedqty by remember{mutableStateOf(item.quantity)}
     var isEditing by remember{mutableStateOf(item.isEditing)}
