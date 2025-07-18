@@ -38,7 +38,7 @@ A simple Shopping List app built using **Kotlin** and **Jetpack Compose**, desig
 
 ## 📸 Preview
 
-*Add screenshots here (optional)*
+![Images](Images/)
 
 ---
 
